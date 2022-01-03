@@ -105,6 +105,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             point = int(point)
             if point > self.seasonpoint
                 pointerror = 1
+            if count > self.seasoncount
+                counterror = 1
             if aicount == 0:
                 await ctx.send("AI가 없습니다.")
             elif aicount > 1:
