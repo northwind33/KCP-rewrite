@@ -1,0 +1,43 @@
+import discord
+import asyncio
+import json
+import os
+from discord.ext import commands
+
+with open('token.txt', 'r') as f:
+    token = f.read()
+
+with open('settings.json', 'r') as f:
+    settings = json.load(f)
+
+def is_whitelisted(user):
+    if user in settings['whitelist']:
+        return True
+    else:
+        return False
+
+bot = commands.Bot(command_prefix="!")
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send("pong")
+
+@bot.command()
+async def load(ctx, extension):
+    bot.load_extension(f'cogs.{extension}')
+    await ctx.send(f'Loaded {extension}')
+
+@bot.command()
+async def unload(ctx, extension):
+    bot.unload_extension(f'cogs.{extension}')
+    await ctx.send(f'Unloaded {extension}')
+
+@bot.command()
+async def reload(ctx, extension):
+    bot.unload_extension(f'cogs.{extension}')
+    bot.load_extension(f'cogs.{extension}')
+    await ctx.send(f'Reloaded {extension}')
+
+[bot.load_extension(f"cogs.{x.replace('.py', '')}") for x in os.listdir("./cogs") if x.endswith('.py') and not x.startswith("_")]
+
+bot.run(token)
