@@ -99,6 +99,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 elif "amount" in x and resource == 1:
                     mass += self.unitslist.get(unit) * float(x[11:])
                     resource = 0
+            mass = float(mass, 3)
+            point = int(point)
             if aicount == 0:
                 await ctx.send("AI가 없습니다.")
             elif aicount > 1:
