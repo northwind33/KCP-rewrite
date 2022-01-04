@@ -100,7 +100,13 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     mass += self.unitslist.get(unit) * float(x[11:])
                     resource = 0
             mass = round(mass, 3)
+            if mass > self.seasonmass
+                masserror = 1
             point = int(point)
+            if point > self.seasonpoint
+                pointerror = 1
+            if count > self.seasoncount
+                counterror = 1
             if aicount == 0:
                 await ctx.send("AI가 없습니다.")
             elif aicount > 1:
