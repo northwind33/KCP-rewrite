@@ -58,7 +58,9 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             tweaklist = []
             resource = 0
             for x in text.splitlines():
-                if "version" in x:
+                if "ship" in x:
+                    name = x[7:]
+                elif "version" in x:
                     version = x[10:]
                     if not version == self.seasonversion:
                         versionerror = 1
