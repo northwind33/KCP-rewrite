@@ -30,11 +30,24 @@ class CraftScanner(commands.Cog, name="craftScanner"):
 
     @commands.command(name="check", aliases=["검수"])
     async def craft(self, ctx):
+        crafts = []
         for x in ctx.message.attachments:
             file = await x.read()
             text = file.decode("utf-8")
 
-            # cart324
+            template = {
+                'Version': False,
+                'Size': False,
+                'Part': False,
+                'Armor': False,
+                'ArmorType': False,
+                'Tweak': False,
+                'Mass': False,
+                'Point': False,
+                'Count': False}
+
+            crafts.append([template])
+
             aicount = 0
             mass = 0
             point = 0
@@ -100,18 +113,19 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     mass += self.unitslist.get(unit) * float(x[11:])
                     resource = 0
             mass = round(mass, 3)
-            if mass > self.seasonmass
+            if mass > int(self.seasonmass):
                 masserror = 1
             point = int(point)
-            if point > self.seasonpoint
+            if point > int(self.seasonpoint):
                 pointerror = 1
-            if count > self.seasoncount
+            if partcount > int(self.seasoncount):
                 counterror = 1
             if aicount == 0:
                 await ctx.send("AI가 없습니다.")
             elif aicount > 1:
                 await ctx.send("AI가 2개 이상입니다.")
-            await ctx.send('version: ' + str(version) + '\n' + 'size: ' + str(size) + '\n' + 'mass: ' + str(mass) + '\n' + 'prohibitionpartlist: ' + str(prohibitionpartlist) + '\n' + 'armorlist: ' + str(armorlist) + '\n' + 'armortypelist: ' + str(armortypelist) + '\n' + 'tweaklist: ' + str(tweaklist) + '\n' + 'partcount: ' + str(partcount))
+
+            print(str(len(ctx.message.attachments)))
 
 
 def setup(bot):
