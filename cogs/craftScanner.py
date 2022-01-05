@@ -117,7 +117,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     mass += self.unitslist.get(unit) * float(x[11:])
                     resource = 0
             mass = round(mass, 3)
-            if mass > int(self.seasonmass):
+            if mass > float(self.seasonmass):
                 crafts[-1][0]['Mass'] = mass
             point = int(point)
             if point > int(self.seasonpoint):
