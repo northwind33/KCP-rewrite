@@ -7,8 +7,12 @@ from discord.ext import commands
 with open('token.txt', 'r') as f:
     token = f.read()
 
-with open('settings.json', 'r') as f:
-    settings = json.load(f)
+def load_settings():
+    global settings
+    with open('settings.json', 'r') as f:
+        settings = json.load(f)
+
+load_settings()
 
 def is_whitelisted(user):
     if user in settings['whitelist']:
@@ -22,6 +26,7 @@ bot = commands.Bot(command_prefix="!")
 async def load(ctx, extension):
     if not is_whitelisted(ctx.author):
         return
+    load_settings()
     bot.load_extension(f'cogs.{extension}')
     await ctx.send(f'Loaded {extension}')
 
@@ -36,6 +41,7 @@ async def unload(ctx, extension):
 async def reload(ctx, extension):
     if not is_whitelisted(ctx.author):
         return
+    load_settings()
     bot.unload_extension(f'cogs.{extension}')
     bot.load_extension(f'cogs.{extension}')
     await ctx.send(f'Reloaded {extension}')
