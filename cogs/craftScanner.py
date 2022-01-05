@@ -71,7 +71,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     if sizes[0] > self.seasonsize[0] or sizes[1] > self.seasonsize[1] or sizes[2] > self.seasonsize[2]:
                         sizeerror = 1
                 elif "part = " in x:
-                    part = x[8:x.find("_")]
+                    part = x[8:x.rfind("_")]
                     partcount += 1
                     if part not in self.partslist:
                         prohibitionpartlist.append(part)
