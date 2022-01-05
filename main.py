@@ -26,23 +26,23 @@ bot = commands.Bot(command_prefix="!")
 
 @bot.command()
 async def load(ctx, extension):
-    #if not is_whitelisted(ctx.author):
-    #    return
+    if not is_whitelisted(ctx.author.id):
+        return
     load_settings()
     bot.load_extension(f'cogs.{extension}')
     await ctx.send(f'Loaded {extension}')
 
 @bot.command()
 async def unload(ctx, extension):
-    #if not is_whitelisted(ctx.author):
-    #    return
+    if not is_whitelisted(ctx.author.id):
+        return
     bot.unload_extension(f'cogs.{extension}')
     await ctx.send(f'Unloaded {extension}')
 
 @bot.command()
 async def reload(ctx, extension):
-    #if not is_whitelisted(ctx.author):
-    #    return
+    if not is_whitelisted(ctx.author.id):
+        return
     load_settings()
     bot.unload_extension(f'cogs.{extension}')
     bot.load_extension(f'cogs.{extension}')
