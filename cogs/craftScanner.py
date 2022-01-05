@@ -47,7 +47,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 'Count': False,
                 'AI': False}
 
-            crafts.append([template, None])
+            crafts.append([template, None, {'mass': 0, 'point': 0, 'count': 0}])
 
             aicount = 0
             mass = 0
