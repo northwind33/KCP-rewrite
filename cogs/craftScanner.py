@@ -196,8 +196,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title="검수 결과", description="대충 뭉치검수 만드는 중", color=0xffffff)
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+            embed.set_thumbnail(url=ctx.author.avatar)
             for x in crafts:
                 if x[1] is not None:
                     embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
