@@ -122,8 +122,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 elif "amount" in x and resource == 1:
                     mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:-1])
                     resource = 0
-            mass = round(mass, 3)
-            if mass > float(self.seasonmass):
+            mass = up(mass, 3)
+            if mass > Decimal(self.seasonmass):
                 crafts[-1][0]['Mass'] = mass
             point = int(point)
             if point > int(self.seasonpoint):
