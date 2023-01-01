@@ -104,7 +104,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         armortypelist.append(part)
                         crafts[-1][0]['ArmorType'] = armortype
                 elif "HullTypeNum" in x and prohibition == 0:
-                    HullType = x[16:-1]
+                    HullType = x[16:]
                     if not HullType == partinfo[3]:
                         HullTypeList.append(part)
                         crafts[-1][0]['HullType'] = HullType
@@ -118,11 +118,11 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 elif "RESOURCE" in x and prohibition == 0:
                     resource = 1
                 elif "name" in x and resource == 1:
-                    unit = x[9:-1]
+                    unit = x[9:]
                 elif "amount" in x and resource == 1:
-                    mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:-1])
+                    mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:])
                     resource = 0
-            mass = up(mass, 3)
+            mass = up(mass)
             if mass > Decimal(self.seasonmass):
                 crafts[-1][0]['Mass'] = mass
             point = int(point)
@@ -155,8 +155,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="검수 결과", color=0xeb4258)
-                embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-                embed.set_thumbnail(url=ctx.author.avatar_url)
+                embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+                embed.set_thumbnail(url=ctx.author.avatar)
                 if(crafts[0][0]['Version'] is not False):
                     embed.add_field(name='버전', value="❌ " + str(crafts[0][0]['Version']), inline=False)
                 else:
@@ -174,7 +174,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 else:
                     embed.add_field(name='장갑 재질', value="🟢 " + '정상', inline=False)
                 if(crafts[0][0]['HullType'] is not False):
-                    embed.add_field(name='동체 재질', value="❌ " + str(crafts[0][0]['Armor']), inline=False)
+                    embed.add_field(name='동체 재질', value="❌ " + str(crafts[0][0]['HullType']), inline=False)
                 else:
                     embed.add_field(name='동체 재질', value="🟢 " + '정상', inline=False)
                 if(crafts[0][0]['Tweak'] is not False):
@@ -196,8 +196,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title="검수 결과", description="대충 뭉치검수 만드는 중", color=0xffffff)
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+            embed.set_thumbnail(url=ctx.author.avatar)
             for x in crafts:
                 if x[1] is not None:
                     embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
