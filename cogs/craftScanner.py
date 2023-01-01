@@ -1,5 +1,12 @@
 import discord
 from discord.ext import commands
+from decimal import Decimal
+
+def up(something):
+    if str(something)[:6] == str(round(something, 3)):
+        return round(something, 3) + Decimal(0.001)
+    else:
+        return round(something, 3)
 
 class CraftScanner(commands.Cog, name="craftScanner"):
     def __init__(self, bot):
@@ -7,21 +14,21 @@ class CraftScanner(commands.Cog, name="craftScanner"):
 
         self.partslist = {}
         self.unitslist = {}
-        with open("data/partlist.txt", "r") as z:
-            for w in z.readlines():
-                w = w.split(",")
-                partkey = w[0]
-                partvalue = w[1:6]
-                partvalue[4] = partvalue[4][:-1]
-                self.partslist[partkey] = partvalue
-        with open("data/unitlist.txt", "r") as a:
-            for b in a.readlines():
-                b = b.split(",")
-                unitkey = b[0]
-                unitvalue = float(b[1])
-                self.unitslist[unitkey] = unitvalue
-        with open("data/season.txt", "r") as c:
-            season = c.read().split(",")
+        with open("data/partlist.txt", "r") as part:
+            for part_div in part.readlines():
+                part_div = part_div.split(",")
+                partkey = part_div[0]
+                part_value = part_div[1:6]
+                part_value[4] = part_value[4][:-1]
+                self.parts_dic[partkey] = part_value
+        with open("data/unitlist.txt", "r") as unit:
+            for dic_unit in unit.readlines():
+                dic_unit = dic_unit.split(",")
+                unitkey = dic_unit[0]
+                unitvalue = dic_unit[1][:-1]
+                self.units_dic[unitkey] = unitvalue
+        with open("data/season.txt", "r") as season_info:
+            season = season_info.read().split(",")
             self.seasonversion = season[0]
             self.seasonsize = list(map(float, season[1:4]))
             self.seasonmass = season[4]
@@ -39,8 +46,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 'Version': False,
                 'Size': False,
                 'Part': False,
-                'Armor': False,
                 'ArmorType': False,
+                'HullType': False,
                 'Tweak': False,
                 'Mass': False,
                 'Point': False,
@@ -50,12 +57,12 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             crafts.append([template, None, {'mass': 0, 'point': 0, 'count': 0}])
 
             aicount = 0
-            mass = 0
+            mass = Decimal(0)
             point = 0
             partcount = 0
             prohibitionpartlist = []
-            armorlist = []
             armortypelist = []
+            HullTypeList = []
             tweaklist = []
             resource = 0
             for x in text.splitlines():
@@ -75,33 +82,30 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 elif "part = " in x:
                     part = x[8:x.rfind("_")]
                     partcount += 1
-                    if part not in self.partslist:
+                    if part not in self.parts_dic:
                         prohibitionpartlist.append(part)
                         prohibition = 1
                         crafts[-1][0]['Part'] = part
                     else:
                         prohibition = 0
-                        partinfo = self.partslist.get(part)
+                        partinfo = self.parts_dic.get(part)
                         if part == "bdPilotAI" or part == "bdShipAI":
                             aicount += 1
-                        mass += float(partinfo[0])
-                        point += float(partinfo[1])
+                        mass += Decimal(partinfo[0])
+                        point += int(partinfo[1])
                 elif "modMass" in x and prohibition == 0:
                     modmass = x[11:]
-                    mass += float(modmass)
-                elif "name = HitpointTracker" in x and prohibition == 0:
-                    hitpoint = 1
-                elif "Armor = " in x and prohibition == 0 and hitpoint == 1:
-                    armor = x[10:]
-                    hitpoint = 0
-                    if not armor == partinfo[2]:
-                        armorlist.append(part)
-                        crafts[-1][0]['Armor'] = armor
+                    mass += Decimal(modmass)
                 elif "ArmorTypeNum" in x and prohibition == 0:
                     armortype = x[17:]
-                    if not armortype == partinfo[3]:
+                    if not armortype == partinfo[2]:
                         armortypelist.append(part)
                         crafts[-1][0]['ArmorType'] = armortype
+                elif "HullTypeNum" in x and prohibition == 0:
+                    HullType = x[16:-1]
+                    if not HullType == partinfo[3]:
+                        HullTypeList.append(part)
+                        crafts[-1][0]['HullType'] = HullType
                 elif "currentScale" in x and prohibition == 0:
                     cuttentscale = x[15:]
                 elif "defaultScale" in x and prohibition == 0:
@@ -112,9 +116,9 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 elif "RESOURCE" in x and prohibition == 0:
                     resource = 1
                 elif "name" in x and resource == 1:
-                    unit = x[9:]
+                    unit = x[9:-1]
                 elif "amount" in x and resource == 1:
-                    mass += self.unitslist.get(unit) * float(x[11:])
+                    mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:-1])
                     resource = 0
             mass = round(mass, 3)
             if mass > float(self.seasonmass):
@@ -140,8 +144,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 embed.add_field(name='버전', value="🟢 " + str(crafts[0][0]['Version']), inline=False)
                 embed.add_field(name='크기', value="🟢 " + str(crafts[0][0]['Size']), inline=True)
                 embed.add_field(name='부품', value="🟢 " + '정상', inline=False)
-                embed.add_field(name='장갑', value="🟢 " + '정상', inline=False)
                 embed.add_field(name='장갑 재질', value="🟢 " + '정상', inline=False)
+                embed.add_field(name='동체 재질', value="🟢 " + '정상', inline=False)
                 embed.add_field(name='트윅스케일', value="🟢 " + '정상', inline=False)
                 embed.add_field(name='무게', value="🟢 " + str(crafts[0][0]['Mass']) + '톤', inline=False)
                 embed.add_field(name='점수', value="🟢 " + str(crafts[0][0]['Point']) + '점', inline=False)
@@ -163,14 +167,14 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     embed.add_field(name='부품', value="❌ " + str(crafts[0][0]['Part']), inline=False)
                 else:
                     embed.add_field(name='부품', value="🟢 " + '정상', inline=False)
-                if(crafts[0][0]['Armor'] is not False):
-                    embed.add_field(name='장갑', value="❌ " + str(crafts[0][0]['Armor']), inline=False)
-                else:
-                    embed.add_field(name='장갑', value="🟢 " + '정상', inline=False)
                 if(crafts[0][0]['ArmorType'] is not False):
                     embed.add_field(name='장갑 재질', value="❌ " + str(crafts[0][0]['ArmorType']), inline=False)
                 else:
                     embed.add_field(name='장갑 재질', value="🟢 " + '정상', inline=False)
+                if(crafts[0][0]['HullType'] is not False):
+                    embed.add_field(name='동체 재질', value="❌ " + str(crafts[0][0]['Armor']), inline=False)
+                else:
+                    embed.add_field(name='동체 재질', value="🟢 " + '정상', inline=False)
                 if(crafts[0][0]['Tweak'] is not False):
                     embed.add_field(name='트윅스케일', value="❌ " + '금지된 트윅스케일 사용됨', inline=False)
                 else:
