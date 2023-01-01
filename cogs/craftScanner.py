@@ -14,6 +14,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
 
         self.partslist = {}
         self.unitslist = {}
+        self.parts_dic = {}
+        self.units_dic = {}
         with open("data/partlist.txt", "r") as part:
             for part_div in part.readlines():
                 part_div = part_div.split(",")
