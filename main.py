@@ -22,7 +22,7 @@ def is_whitelisted(user):
     else:
         return False
 
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix='!',intents=discord.Intents.all())
 
 @bot.command()
 async def load(ctx, extension):
