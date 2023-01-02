@@ -4,7 +4,7 @@ from decimal import Decimal
 
 
 def up(something):
-    if str(something)[:6] == str(round(something, 3)):
+    if str(something).split(".")[1][:3] == str(round(something, 3)).split(".")[1]:
         return round(something, 3) + Decimal(0.001)
     else:
         return round(something, 3)
