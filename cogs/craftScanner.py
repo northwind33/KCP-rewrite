@@ -389,7 +389,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             if len(crafts) == 0:
                 embed = discord.Embed(title="ERROR", description="Please attach your `.craft` file when using this command.", color=0xeb4258)
                 embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                embed.set_thumbnail(url=ctx.author.avatara)
+                embed.set_thumbnail(url=ctx.author.avatar)
                 for x in crafts:
                     if x[1] is not None:
                         embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
