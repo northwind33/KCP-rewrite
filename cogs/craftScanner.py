@@ -248,5 +248,208 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     await ctx.send(embed=embed)
 
 
+# 영어(복붙)
+
+    @commands.command(name="check")
+    async def craft(self, ctx):
+        crafts = []
+        for x in ctx.message.attachments:
+            file = await x.read()
+            text = file.decode("utf-8")
+
+            template1 = {
+                'Version_pass': False,
+                'Size_pass': False,
+                'Part_pass': False,
+                'ArmorType_pass': False,
+                'HullType_pass': False,
+                'Tweak_pass': False,
+                'Mass_pass': False,
+                'Point_pass': False,
+                'Count_pass': False,
+                'AI_pass': False}
+            # crafts[-1][2]로 넣어도 자꾸 crafts[-1][0]이 오염되길레 그냥 분리시켜버림
+            template2 = {
+                'Version': "",
+                'Size': "",
+                'Part': "",
+                'ArmorType': "",
+                'HullType': "",
+                'Tweak': "",
+                'Mass': "",
+                'Point': "",
+                'Count': "",
+                'AI': ""}
+
+            crafts.append([template1, None, template2])
+
+            aicount = 0
+            mass = Decimal(0)
+            point = 0
+            partcount = 0
+            prohibitionpartlist = []
+            armortypelist = []
+            HullTypeList = []
+            tweaklist = []
+            resource = 0
+            for x in text.splitlines():
+                if "ship" in x:
+                    name = x[7:]
+                    crafts[-1][1] = name
+                elif "version" in x:
+                    version = x[10:]
+                    if version == self.seasonversion:
+                        crafts[-1][0]['Version_pass'] = True
+                    crafts[-1][2]['Version'] = version
+                elif "size" in x:
+                    sizes = x[7:]
+                    sizes = [round(y, 1) for y in map(float, sizes.split(","))]
+                    size = " × ".join(map(str, sizes))  # sizes는 [너비, 높이, 길이], size는 ×로 연결한 str
+                    if not sizes[0] > self.seasonsize[0] or sizes[1] > self.seasonsize[1] or sizes[2] > self.seasonsize[2]:
+                        crafts[-1][0]['Size_pass'] = True
+                    crafts[-1][2]['Size'] = size
+                elif "part = " in x:
+                    part = x[8:x.rfind("_")]
+                    partcount += 1
+                    if part not in self.parts_dic:
+                        prohibitionpartlist.append(part)
+                        prohibition = 1
+                    else:
+                        prohibition = 0
+                        partinfo = self.parts_dic.get(part)
+                        if part == "bdPilotAI" or part == "bdShipAI" or part == "bdVTOLAI":
+                            aicount += 1
+                        mass += Decimal(partinfo[0])
+                        point += int(partinfo[1])
+                elif "modMass" in x and prohibition == 0:
+                    modmass = x[11:]
+                    mass += Decimal(modmass)
+                elif "ArmorTypeNum" in x and prohibition == 0:
+                    armortype = x[17:]
+                    if not armortype == partinfo[2]:
+                        armortypelist.append(part)
+                elif "HullTypeNum" in x and prohibition == 0:
+                    HullType = x[16:]
+                    if not HullType == partinfo[3]:
+                        HullTypeList.append(part)
+                elif "currentScale" in x and prohibition == 0:
+                    cuttentscale = x[15:]
+                elif "defaultScale" in x and prohibition == 0:
+                    defaultscale = x[15:]
+                    if "u" not in partinfo[4] and cuttentscale > defaultscale:
+                        tweaklist.append(part)
+                elif "RESOURCE" in x and prohibition == 0:
+                    resource = 1
+                elif "name" in x and resource == 1:
+                    unit = x[9:]
+                elif "amount" in x and resource == 1:
+                    mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:])
+                    resource = 0
+            if len(prohibitionpartlist) == 0:  # 버젼, 사이즈는 위의 코드에서 처리
+                crafts[-1][0]['Part_pass'] = True
+            crafts[-1][2]['Part'] = ", ".join(map(str, prohibitionpartlist))
+            if len(armortypelist) == 0:
+                crafts[-1][0]['ArmorType_pass'] = True
+            crafts[-1][2]['ArmorType'] = ", ".join(map(str, armortypelist))
+            if len(HullTypeList) == 0:
+                crafts[-1][0]['HullType_pass'] = True
+            crafts[-1][2]['HullType'] = ", ".join(map(str, HullTypeList))
+            if len(tweaklist) == 0:
+                crafts[-1][0]['Tweak_pass'] = True
+            crafts[-1][2]['Tweak'] = ", ".join(map(str, tweaklist))
+            mass = up(mass)  # 무게 소숫점 넷째자리에서 올림
+            if mass <= Decimal(self.seasonmass):
+                crafts[-1][0]['Mass_pass'] = True
+            crafts[-1][2]['Mass'] = to_str(mass)    # 부동소숫점 오류 제거
+            point = int(point)
+            if point <= int(self.seasonpoint):
+                crafts[-1][0]['Point_pass'] = True
+            crafts[-1][2]['Point'] = point
+            if partcount <= int(self.seasoncount):
+                crafts[-1][0]['Count_pass'] = True
+            crafts[-1][2]['Count'] = partcount
+            if aicount == 1:
+                crafts[-1][0]['AI_pass'] = True
+            crafts[-1][2]['AI'] = aicount
+        print(crafts)
+
+        if len(crafts) == 0:
+            embed = discord.Embed(title="ERROR", description="Please attach your `.craft` file when using this command.", color=0xeb4258)
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+            embed.set_thumbnail(url=ctx.author.avatar)
+            for x in crafts:
+                if x[1] is not None:
+                    embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
+            await ctx.send(embed=embed)
+        else:
+            for craft in crafts:
+                passed = True
+                for key, value in craft[0].items():
+                    if value == False:
+                        passed = False
+                        break
+                if passed:
+                    embed = discord.Embed(title=f"'{craft[1]}' Results", color=0x00ff95)
+                    embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+                    embed.set_thumbnail(url=ctx.author.avatar)
+                    embed.add_field(name='Version', value="🟢 " + str(craft[2]['Version']), inline=False)
+                    embed.add_field(name='Size', value="🟢 " + str(craft[2]['Size']), inline=True)
+                    embed.add_field(name='Improper Part Use', value="🟢 " + 'Banned parts not found', inline=False)
+                    embed.add_field(name='Armor Type', value="🟢 " + 'OK', inline=False)
+                    embed.add_field(name='Hull Material', value="🟢 " + 'OK', inline=False)
+                    embed.add_field(name='TweakScale', value="🟢 " + 'OK', inline=False)
+                    embed.add_field(name='Mass', value="🟢 " + str(craft[2]['Mass']) + 't', inline=False)
+                    embed.add_field(name='Points', value="🟢 " + str(craft[2]['Point']) + 'Pt(s)', inline=False)
+                    embed.add_field(name='Parts Count', value="🟢 " + str(craft[2]['Count']), inline=False)
+                    embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
+                    await ctx.send(embed=embed)
+                else:
+                    embed = discord.Embed(title=f"'{craft[1]}' Results", color=0xeb4258)
+                    embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+                    embed.set_thumbnail(url=ctx.author.avatar)
+                    if (craft[0]['Version_pass'] == False):
+                        embed.add_field(name='Version', value="❌ " + str(craft[2]['Version']), inline=False)
+                    else:
+                        embed.add_field(name='Version', value="🟢 " + str(craft[2]['Version']), inline=False)
+                    if (craft[0]['Size_pass'] == False):
+                        embed.add_field(name='Size', value="❌ " + str(craft[2]['Size']), inline=False)
+                    else:
+                        embed.add_field(name='Size', value="🟢 " + str(craft[2]['Size']), inline=False)
+                    if (craft[0]['Part_pass'] == False):
+                        embed.add_field(name='Improper Part Use', value="❌ " + str(craft[2]['Part']), inline=False)
+                    else:
+                        embed.add_field(name='Improper Part Use', value="🟢 " + 'Banned parts not found', inline=False)
+                    if (craft[0]['ArmorType_pass'] == False):
+                        embed.add_field(name='Armor Type', value="❌ " + str(craft[2]['ArmorType']), inline=False)
+                    else:
+                        embed.add_field(name='Armor Type', value="🟢 " + 'OK', inline=False)
+                    if (craft[0]['HullType_pass'] == False):
+                        embed.add_field(name='Hull Material', value="❌ " + str(craft[2]['HullType']), inline=False)
+                    else:
+                        embed.add_field(name='Hull Material', value="🟢 " + 'OK', inline=False)
+                    if (craft[0]['Tweak_pass'] == False):
+                        embed.add_field(name='TweakScale', value="❌ " + 'Inappropriate use of TweakScale detected\n' + str(craft[2]['Tweak']),
+                                        inline=False)
+                    else:
+                        embed.add_field(name='TweakScale', value="🟢 " + 'OK', inline=False)
+                    if (craft[0]['Mass_pass'] == False):
+                        embed.add_field(name='Mass', value="❌ " + str(craft[2]['Mass']) + 't', inline=False)
+                    else:
+                        embed.add_field(name='Mass', value="🟢 " + str(craft[2]['Mass']) + 't', inline=False)
+                    if (craft[0]['Point_pass'] == False):
+                        embed.add_field(name='Points', value="❌ " + str(craft[2]['Point']) + 'Pt(s)', inline=False)
+                    else:
+                        embed.add_field(name='Points', value="🟢 " + str(craft[2]['Point']) + 'Pt(s)', inline=False)
+                    if (craft[0]['Count_pass'] == False):
+                        embed.add_field(name='Parts Count', value="❌ " + str(craft[2]['Count']), inline=False)
+                    else:
+                        embed.add_field(name='Parts Count', value="🟢 " + str(craft[2]['Count']), inline=False)
+                    if (craft[0]['AI_pass'] == False):
+                        embed.add_field(name='AI', value="❌ " + "Too many AIs", inline=False)
+                    else:
+                        embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
+                    await ctx.send(embed=embed)
+
+
 def setup(bot):
     bot.add_cog(CraftScanner(bot))
