@@ -542,6 +542,6 @@ herculesgear,0.4,0,1,2,ud
 sidegear,0.25,0,1,2,ud
 x1gear,0.0275,0,1,2,ud
 x1sidegear,0.035,0,1,2,ud
-B9_Aero_Wing_Procedural_TypeA,0.05,0,10,1,ud
-B9_Aero_Wing_Procedural_TypeB,0.05,0,10,1,ud
-B9_Aero_Wing_Procedural_TypeC,0.05,0,10,1,ud
+B9.Aero.Wing.Procedural.TypeA,0.05,0,1,2,ud
+B9.Aero.Wing.Procedural.TypeB,0.05,0,1,2,ud
+B9.Aero.Wing.Procedural.TypeC,0.05,0,1,2,ud
