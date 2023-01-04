@@ -458,7 +458,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         else:
                             embed.add_field(name='Parts Count', value="🟢 " + str(craft[2]['Count']), inline=False)
                         if (craft[0]['AI_pass'] == False):
-                            embed.add_field(name='AI', value="❌ " + "Too many AIs", inline=False)
+                            embed.add_field(name='AI', value="❌ " + str(craft[2]['AI']) + 'AI(s)', inline=False)
                         else:
                             embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
                         await ctx.send(embed=embed)
