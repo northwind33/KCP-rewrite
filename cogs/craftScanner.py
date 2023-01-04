@@ -21,7 +21,6 @@ def to_str(x):
 class CraftScanner(commands.Cog, name="craftScanner"):
     def __init__(self, bot):
         self.bot = bot
-
         self.partslist = {}
         self.unitslist = {}
         self.parts_dic = {}
