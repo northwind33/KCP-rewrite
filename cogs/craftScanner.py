@@ -202,7 +202,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.add_field(name='파츠수', value="🟢 " + str(craft[2]['Count']) + '개', inline=False)
                         embed.add_field(name='AI', value="🟢 " + '정상', inline=False)
                         await ctx.send(embed=embed)
-                        await ctx.message.delete()
+                        if ctx.guild:
+                            await ctx.message.delete()
                     else:
                         embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0xeb4258)
                         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
@@ -249,7 +250,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         else:
                             embed.add_field(name='AI', value="🟢 " + '정상', inline=False)
                         await ctx.send(embed=embed)
-                        await ctx.message.delete()
+                        if ctx.guild:
+                            await ctx.message.delete()
         except Exception:
             embed = discord.Embed(title="ERROR", color=0xeb4258)
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
@@ -418,7 +420,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.add_field(name='Parts Count', value="🟢 " + str(craft[2]['Count']), inline=False)
                         embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
                         await ctx.send(embed=embed)
-                        await ctx.message.delete()
+                        if ctx.guild:
+                            await ctx.message.delete()
                     else:
                         embed = discord.Embed(title=f"'{craft[1]}' Results", color=0xeb4258)
                         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
@@ -465,7 +468,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         else:
                             embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
                         await ctx.send(embed=embed)
-                        await ctx.message.delete()
+                        if ctx.guild:
+                            await ctx.message.delete()
         except Exception:
             embed = discord.Embed(title="ERROR", color=0xeb4258)
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
