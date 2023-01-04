@@ -15,7 +15,6 @@ def to_str(x):
     x = str(x)
     x_div = x.split(".")
     x_com = x_div[0] + "." + x_div[1][:3]
-    print(x_com)
     return x_com
 
 
