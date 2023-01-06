@@ -180,7 +180,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             print(crafts)
 
             if len(crafts) == 0:
-                embed = discord.Embed(title="ERROR", description="명령어 입력시 `.craft` 파일을 같이 첨부해주세요.", color=0xeb4258)
+                embed = discord.Embed(title="테스트", description="명령어 입력시 `.craft` 파일을 같이 첨부해주세요.", color=0xeb4258)
                 embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
                 embed.set_thumbnail(url=ctx.author.avatar)
                 for x in crafts:
