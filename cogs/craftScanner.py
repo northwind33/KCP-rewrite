@@ -58,6 +58,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     'Version_pass': False,
                     'Size_pass': False,
                     'Part_pass': False,
+                    'Unknown_unit_pass': False,
                     'ArmorType_pass': False,
                     'HullType_pass': False,
                     'Tweak_pass': False,
@@ -70,6 +71,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     'Version': "",
                     'Size': "",
                     'Part': "",
+                    'Unknown_unit': "",
                     'ArmorType': "",
                     'HullType': "",
                     'Tweak': "",
@@ -88,6 +90,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 armortypelist = []
                 HullTypeList = []
                 tweaklist = []
+                unknown_unit_list = []
                 resource = 0
                 for x in text.splitlines():
                     if "ship" in x:
@@ -140,11 +143,17 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     elif "name" in x and resource == 1:
                         unit = x[9:]
                     elif "amount" in x and resource == 1:
-                        mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:])
+                        if self.units_dic.get(unit) is None:
+                            unknown_unit_list.append(unit)
+                        else:
+                            mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:])
                         resource = 0
                 if len(prohibitionpartlist) == 0:  # 버젼, 사이즈는 위의 코드에서 처리
                     crafts[-1][0]['Part_pass'] = True
                 crafts[-1][2]['Part'] = ", ".join(map(str, prohibitionpartlist))
+                if len(unknown_unit_list) == 0:
+                    crafts[-1][0]['Unknown_unit_pass'] = True
+                crafts[-1][2]['Unknown_unit'] = ", ".join(map(str, unknown_unit_list))
                 if len(armortypelist) == 0:
                     crafts[-1][0]['ArmorType_pass'] = True
                 crafts[-1][2]['ArmorType'] = ", ".join(map(str, armortypelist))
@@ -177,6 +186,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 for x in crafts:
                     if x[1] is not None:
                         embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
+                embed.set_footer(text="버그 제보 : cart324#7199")
                 await ctx.send(embed=embed)
             else:
                 for craft in crafts:
@@ -199,6 +209,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.add_field(name='점수', value="🟢 " + str(craft[2]['Point']) + '점', inline=False)
                         embed.add_field(name='파츠수', value="🟢 " + str(craft[2]['Count']) + '개', inline=False)
                         embed.add_field(name='AI', value="🟢 " + '정상', inline=False)
+                        embed.set_footer(text="버그 제보 : cart324#7199")
                         await ctx.send(embed=embed)
                         if ctx.guild:
                             await ctx.message.delete()
@@ -218,6 +229,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             embed.add_field(name='부품', value="❌ " + str(craft[2]['Part']), inline=False)
                         else:
                             embed.add_field(name='부품', value="🟢 " + '금지된 부품이 발견되지 않았습니다.', inline=False)
+                        if (craft[0]['Unknown_unit_pass'] == False):
+                            embed.add_field(name='❗ 알 수 없는 자원 발견됨', value=str(craft[2]['Unknown_unit']))
                         if (craft[0]['ArmorType_pass'] == False):
                             embed.add_field(name='장갑 재질', value="❌ " + str(craft[2]['ArmorType']), inline=False)
                         else:
@@ -247,6 +260,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             embed.add_field(name='AI', value="❌ " + str(craft[2]['AI']) + '개', inline=False)
                         else:
                             embed.add_field(name='AI', value="🟢 " + '정상', inline=False)
+                        embed.set_footer(text="버그 제보 : cart324#7199")
                         await ctx.send(embed=embed)
                         if ctx.guild:
                             await ctx.message.delete()
@@ -259,7 +273,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             await ctx.send(embed=embed)
             error_log = traceback.format_exc(limit=None, chain=True)
             cart = self.bot.get_user(344384179552780289)
-            await cart.send("사용자 = " + ctx.author.name + "\n" + str(error_log))
+            await cart.send(("-" * 40) + "\n" + "사용자 = " + ctx.author.name + "\n" + str(error_log))
 
 
 # 영어(복붙)
@@ -276,6 +290,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     'Version_pass': False,
                     'Size_pass': False,
                     'Part_pass': False,
+                    'Unknown_unit_pass': False,
                     'ArmorType_pass': False,
                     'HullType_pass': False,
                     'Tweak_pass': False,
@@ -288,6 +303,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     'Version': "",
                     'Size': "",
                     'Part': "",
+                    'Unknown_unit': "",
                     'ArmorType': "",
                     'HullType': "",
                     'Tweak': "",
@@ -306,6 +322,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 armortypelist = []
                 HullTypeList = []
                 tweaklist = []
+                unknown_unit_list = []
                 resource = 0
                 for x in text.splitlines():
                     if "ship" in x:
@@ -358,11 +375,17 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     elif "name" in x and resource == 1:
                         unit = x[9:]
                     elif "amount" in x and resource == 1:
-                        mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:])
+                        if self.units_dic.get(unit) is None:
+                            unknown_unit_list.append(unit)
+                        else:
+                            mass += Decimal(self.units_dic.get(unit)) * Decimal(x[11:])
                         resource = 0
                 if len(prohibitionpartlist) == 0:  # 버젼, 사이즈는 위의 코드에서 처리
                     crafts[-1][0]['Part_pass'] = True
                 crafts[-1][2]['Part'] = ", ".join(map(str, prohibitionpartlist))
+                if len(unknown_unit_list) == 0:
+                    crafts[-1][0]['Unknown_unit_pass'] = True
+                crafts[-1][2]['Unknown_unit'] = ", ".join(map(str, unknown_unit_list))
                 if len(armortypelist) == 0:
                     crafts[-1][0]['ArmorType_pass'] = True
                 crafts[-1][2]['ArmorType'] = ", ".join(map(str, armortypelist))
@@ -395,6 +418,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 for x in crafts:
                     if x[1] is not None:
                         embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
+                embed.set_footer(text="Bug report : cart324#7199")
                 await ctx.send(embed=embed)
             else:
                 for craft in crafts:
@@ -417,6 +441,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.add_field(name='Points', value="🟢 " + str(craft[2]['Point']) + 'Pt(s)', inline=False)
                         embed.add_field(name='Parts Count', value="🟢 " + str(craft[2]['Count']), inline=False)
                         embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
+                        embed.set_footer(text="Bug report : cart324#7199")
                         await ctx.send(embed=embed)
                         if ctx.guild:
                             await ctx.message.delete()
@@ -436,6 +461,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             embed.add_field(name='Forbidden Parts', value="❌ " + str(craft[2]['Part']), inline=False)
                         else:
                             embed.add_field(name='Forbidden Parts', value="🟢 " + 'Banned parts not found', inline=False)
+                        if (craft[0]['Unknown_unit_pass'] == False):
+                            embed.add_field(name='❗ Unknown Unit Detected', value=str(craft[2]['Unknown_unit']))
                         if (craft[0]['ArmorType_pass'] == False):
                             embed.add_field(name='Armor Type', value="❌ " + str(craft[2]['ArmorType']), inline=False)
                         else:
@@ -462,9 +489,10 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         else:
                             embed.add_field(name='Parts Count', value="🟢 " + str(craft[2]['Count']), inline=False)
                         if (craft[0]['AI_pass'] == False):
-                            embed.add_field(name='AI', value="❌ " + str(craft[2]['AI']) + 'AI(s)', inline=False)
+                            embed.add_field(name='AI', value="❌ " + "Too many AIs", inline=False)
                         else:
                             embed.add_field(name='AI', value="🟢 " + 'OK', inline=False)
+                        embed.set_footer(text="Bug report : cart324#7199")
                         await ctx.send(embed=embed)
                         if ctx.guild:
                             await ctx.message.delete()
