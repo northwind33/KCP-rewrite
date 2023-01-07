@@ -180,7 +180,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             print(crafts)
 
             if len(crafts) == 0:
-                embed = discord.Embed(title="ERROR", description="명령어 입력시 `.craft` 파일을 같이 첨부해주세요.", color=0xeb4258)
+                embed = discord.Embed(title="ERROR", description="앗! 확인할 파일이 없어요.\n명령어 입력시 `.craft` 파일을 같이 첨부해주세요.", color=0xeb4258)
                 embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
                 embed.set_thumbnail(url=ctx.author.avatar)
                 for x in crafts:
@@ -199,16 +199,16 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0x00ff95)
                         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
                         embed.set_thumbnail(url=ctx.author.avatar)
-                        embed.add_field(name='버전', value="🟢 " + str(craft[2]['Version']), inline=False)
+                        embed.add_field(name='버전', value="🟢 " + str(craft[2]['Version']) + ' 버전 사용 기체에요.', inline=False)
                         embed.add_field(name='크기', value="🟢 " + str(craft[2]['Size']), inline=True)
-                        embed.add_field(name='부품', value="🟢 " + '금지된 부품이 발견되지 않았습니다.', inline=False)
-                        embed.add_field(name='장갑 재질', value="🟢 " + '정상', inline=False)
-                        embed.add_field(name='동체 재질', value="🟢 " + '정상', inline=False)
-                        embed.add_field(name='트윅스케일', value="🟢 " + '정상', inline=False)
+                        embed.add_field(name='부품', value="🟢 " + '와!\n금지된 부품이 발견되지 않았어요.', inline=False)
+                        embed.add_field(name='장갑 재질', value="🟢 " + '정상이에요.', inline=False)
+                        embed.add_field(name='동체 재질', value="🟢 " + '정상이에요.', inline=False)
+                        embed.add_field(name='트윅스케일', value="🟢 " + '정상이에요.', inline=False)
                         embed.add_field(name='무게', value="🟢 " + str(craft[2]['Mass']) + '톤', inline=False)
                         embed.add_field(name='점수', value="🟢 " + str(craft[2]['Point']) + '점', inline=False)
                         embed.add_field(name='파츠수', value="🟢 " + str(craft[2]['Count']) + '개', inline=False)
-                        embed.add_field(name='AI', value="🟢 " + '정상', inline=False)
+                        embed.add_field(name='AI', value="🟢 " + '정상이에요.', inline=False)
                         embed.set_footer(text="버그 제보 : cart324#7199")
                         await ctx.send(embed=embed)
                         if ctx.guild:
@@ -218,9 +218,9 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
                         embed.set_thumbnail(url=ctx.author.avatar)
                         if (craft[0]['Version_pass'] == False):
-                            embed.add_field(name='버전', value="❌ " + str(craft[2]['Version']), inline=False)
+                            embed.add_field(name='버전', value="❌ " + str(craft[2]['Version']) + ' 버전 사용 기체에요.', inline=False)
                         else:
-                            embed.add_field(name='버전', value="🟢 " + str(craft[2]['Version']), inline=False)
+                            embed.add_field(name='버전', value="🟢 " + str(craft[2]['Version']) + ' 버전 사용 기체에요.', inline=False)
                         if (craft[0]['Size_pass'] == False):
                             embed.add_field(name='크기', value="❌ " + str(craft[2]['Size']), inline=False)
                         else:
@@ -228,22 +228,22 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         if (craft[0]['Part_pass'] == False):
                             embed.add_field(name='부품', value="❌ " + str(craft[2]['Part']), inline=False)
                         else:
-                            embed.add_field(name='부품', value="🟢 " + '금지된 부품이 발견되지 않았습니다.', inline=False)
+                            embed.add_field(name='부품', value="🟢 " + '와!\n금지된 부품이 발견되지 않았어요.', inline=False)
                         if (craft[0]['Unknown_unit_pass'] == False):
-                            embed.add_field(name='❗ 알 수 없는 자원 발견됨', value=str(craft[2]['Unknown_unit']))
+                            embed.add_field(name='❗ 알 수 없는 자원이 발견되었어요.', value=str(craft[2]['Unknown_unit']))
                         if (craft[0]['ArmorType_pass'] == False):
                             embed.add_field(name='장갑 재질', value="❌ " + str(craft[2]['ArmorType']), inline=False)
                         else:
-                            embed.add_field(name='장갑 재질', value="🟢 " + '정상', inline=False)
+                            embed.add_field(name='장갑 재질', value="🟢 " + '정상이에요.', inline=False)
                         if (craft[0]['HullType_pass'] == False):
                             embed.add_field(name='동체 재질', value="❌ " + str(craft[2]['HullType']), inline=False)
                         else:
-                            embed.add_field(name='동체 재질', value="🟢 " + '정상', inline=False)
+                            embed.add_field(name='동체 재질', value="🟢 " + '정상이에요.', inline=False)
                         if (craft[0]['Tweak_pass'] == False):
-                            embed.add_field(name='트윅스케일', value="❌ " + '금지된 트윅스케일 사용됨\n' + str(craft[2]['Tweak']),
+                            embed.add_field(name='트윅스케일', value="❌ " + '금지된 트윅스케일이 사용되었어요.\n' + str(craft[2]['Tweak']),
                                             inline=False)
                         else:
-                            embed.add_field(name='트윅스케일', value="🟢 " + '정상', inline=False)
+                            embed.add_field(name='트윅스케일', value="🟢 " + '정상이에요.', inline=False)
                         if (craft[0]['Mass_pass'] == False):
                             embed.add_field(name='무게', value="❌ " + str(craft[2]['Mass']) + '톤', inline=False)
                         else:
@@ -259,7 +259,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         if (craft[0]['AI_pass'] == False):
                             embed.add_field(name='AI', value="❌ " + str(craft[2]['AI']) + '개', inline=False)
                         else:
-                            embed.add_field(name='AI', value="🟢 " + '정상', inline=False)
+                            embed.add_field(name='AI', value="🟢 " + '정상이에요.', inline=False)
                         embed.set_footer(text="버그 제보 : cart324#7199")
                         await ctx.send(embed=embed)
                         if ctx.guild:
@@ -269,7 +269,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
             embed.set_thumbnail(url=ctx.author.avatar)
             embed.add_field(name='감각이 없으니 이게 어떻게 된일이요?', value='어... 하필이면 오류가 영 좋지 않은 곳에 발생했어요.', inline=False)
-            embed.add_field(name='내가 고자라니!', value='오류는 자동으로 전달되었으니 기다려주시기 바랍니다.', inline=False)
+            embed.add_field(name='내가 버그라니!', value='오류는 자동으로 전달되었으니 문제가 해결될 때 까지 기다려주세요.', inline=False)
             await ctx.send(embed=embed)
             error_log = traceback.format_exc(limit=None, chain=True)
             cart = self.bot.get_user(344384179552780289)
@@ -412,7 +412,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             print(crafts)
 
             if len(crafts) == 0:
-                embed = discord.Embed(title="ERROR", description="Please attach your `.craft` file when using this command.", color=0xeb4258)
+                embed = discord.Embed(title="ERROR", description="OOPS, The file is missing.\n Please attach your `.craft` file when using this command.", color=0xeb4258)
                 embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
                 embed.set_thumbnail(url=ctx.author.avatar)
                 for x in crafts:
@@ -433,7 +433,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.set_thumbnail(url=ctx.author.avatar)
                         embed.add_field(name='Game Version', value="🟢 " + str(craft[2]['Version']), inline=False)
                         embed.add_field(name='Dimensions', value="🟢 " + str(craft[2]['Size']), inline=True)
-                        embed.add_field(name='Forbidden Parts', value="🟢 " + 'Banned parts not found', inline=False)
+                        embed.add_field(name='Forbidden Parts', value="🟢 " + 'Hooray!\nBanned parts not found', inline=False)
                         embed.add_field(name='Armor Type', value="🟢 " + 'OK', inline=False)
                         embed.add_field(name='Hull Material', value="🟢 " + 'OK', inline=False)
                         embed.add_field(name='Tweakscale on Improper Parts', value="🟢 " + 'OK', inline=False)
@@ -460,7 +460,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         if (craft[0]['Part_pass'] == False):
                             embed.add_field(name='Forbidden Parts', value="❌ " + str(craft[2]['Part']), inline=False)
                         else:
-                            embed.add_field(name='Forbidden Parts', value="🟢 " + 'Banned parts not found', inline=False)
+                            embed.add_field(name='Forbidden Parts', value="🟢 " + 'Hooray!\nBanned parts not found', inline=False)
                         if (craft[0]['Unknown_unit_pass'] == False):
                             embed.add_field(name='❗ Unknown Unit Detected', value=str(craft[2]['Unknown_unit']))
                         if (craft[0]['ArmorType_pass'] == False):
