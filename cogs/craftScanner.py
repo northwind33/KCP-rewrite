@@ -18,6 +18,13 @@ def to_str(x):
     return x_com
 
 
+def is_basic_avatar(avatar_url):
+    if avatar_url == None:
+        return "https://cdn.discordapp.com/attachments/681058514797461647/1063823139601137724/discord-logo-1100x825.jpg"
+    else:
+        return avatar_url
+
+
 class CraftScanner(commands.Cog, name="craftScanner"):
     def __init__(self, bot):
         self.bot = bot
@@ -182,10 +189,11 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 crafts[-1][2]['AI'] = aicount
             print(crafts)
 
+            author_avatar = is_basic_avatar(ctx.author.avatar)
             if len(crafts) == 0:
                 embed = discord.Embed(title="ERROR", description="앗! 확인할 파일이 없어요.\n명령어 입력시 `.craft` 파일을 같이 첨부해주세요.", color=0xeb4258)
-                embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                embed.set_thumbnail(url=ctx.author.avatar)
+                embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                embed.set_thumbnail(url=author_avatar)
                 for x in crafts:
                     if x[1] is not None:
                         embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
@@ -200,8 +208,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             break
                     if passed:
                         embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0x00ff95)
-                        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                        embed.set_thumbnail(url=ctx.author.avatar)
+                        embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                        embed.set_thumbnail(url=author_avatar)
                         embed.add_field(name='버전', value="🟢 " + str(craft[2]['Version']) + ' 버전 사용 기체에요.', inline=False)
                         embed.add_field(name='크기', value="🟢 " + str(craft[2]['Size']), inline=True)
                         embed.add_field(name='부품', value="🟢 " + '와!\n금지된 부품이 발견되지 않았어요.', inline=False)
@@ -218,8 +226,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             await ctx.message.delete()
                     else:
                         embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0xeb4258)
-                        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                        embed.set_thumbnail(url=ctx.author.avatar)
+                        embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                        embed.set_thumbnail(url=author_avatar)
                         if (craft[0]['Version_pass'] == False):
                             embed.add_field(name='버전', value="❌ " + str(craft[2]['Version']) + ' 버전 사용 기체에요.', inline=False)
                         else:
@@ -269,8 +277,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             await ctx.message.delete()
         except Exception:
             embed = discord.Embed(title="ERROR", color=0xeb4258)
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-            embed.set_thumbnail(url=ctx.author.avatar)
+            embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+            embed.set_thumbnail(url=author_avatar)
             embed.add_field(name='감각이 없으니 이게 어떻게 된일이요?', value='어... 하필이면 오류가 영 좋지 않은 곳에 발생했어요.', inline=False)
             embed.add_field(name='내가 버그라니!', value='오류는 자동으로 전달되었으니 문제가 해결될 때 까지 기다려주세요.', inline=False)
             await ctx.send(embed=embed)
@@ -416,10 +424,11 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                 crafts[-1][2]['AI'] = aicount
             print(crafts)
 
+            author_avatar = is_basic_avatar(ctx.author.avatar)
             if len(crafts) == 0:
                 embed = discord.Embed(title="ERROR", description="OOPS, The file is missing.\n Please attach your `.craft` file when using this command.", color=0xeb4258)
-                embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                embed.set_thumbnail(url=ctx.author.avatar)
+                embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                embed.set_thumbnail(url=author_avatar)
                 for x in crafts:
                     if x[1] is not None:
                         embed.add_field(name=x[1], value="\n".join(list(map(str, x[0].values()))), inline=False)
@@ -434,8 +443,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             break
                     if passed:
                         embed = discord.Embed(title=f"'{craft[1]}' Results", color=0x00ff95)
-                        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                        embed.set_thumbnail(url=ctx.author.avatar)
+                        embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                        embed.set_thumbnail(url=author_avatar)
                         embed.add_field(name='Game Version', value="🟢 " + str(craft[2]['Version']), inline=False)
                         embed.add_field(name='Dimensions', value="🟢 " + str(craft[2]['Size']), inline=True)
                         embed.add_field(name='Forbidden Parts', value="🟢 " + 'Hooray!\nBanned parts not found', inline=False)
@@ -452,8 +461,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             await ctx.message.delete()
                     else:
                         embed = discord.Embed(title=f"'{craft[1]}' Results", color=0xeb4258)
-                        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-                        embed.set_thumbnail(url=ctx.author.avatar)
+                        embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                        embed.set_thumbnail(url=author_avatar)
                         if (craft[0]['Version_pass'] == False):
                             embed.add_field(name='Game Version', value="❌ " + str(craft[2]['Version']), inline=False)
                         else:
@@ -503,8 +512,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             await ctx.message.delete()
         except Exception:
             embed = discord.Embed(title="ERROR", color=0xeb4258)
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
-            embed.set_thumbnail(url=ctx.author.avatar)
+            embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+            embed.set_thumbnail(url=author_avatar)
             embed.add_field(name='This has been the worst bug in the history of bugs, maybe ever.', value='​', inline=False)
             embed.add_field(name='Apply cold water to the bugged area.', value="Achthually, you don't need to. The automatic report is on the way.", inline=False)
             await ctx.send(embed=embed)
