@@ -49,6 +49,9 @@ class CraftScanner(commands.Cog, name="craftScanner"):
     @commands.command(name="검수")
     async def craft(self, ctx):
         try:
+            if ctx.author.avatar == NONE:
+                ctx.author.avatar = "https://cdn.discordapp.com/attachments/681058514797461647/1063823139601137724/discord-logo-1100x825.jpg"
+            ctx.author.avatar = "https://cdn.discordapp.com/attachments/681058514797461647/1063823139601137724/discord-logo-1100x825.jpg"
             crafts = []
             for x in ctx.message.attachments:
                 file = await x.read()
@@ -281,6 +284,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
     @commands.command(name="check")
     async def craft_EN(self, ctx):
         try:
+            if ctx.author.avatar == NONE:
+                ctx.author.avatar = "https://cdn.discordapp.com/attachments/681058514797461647/1063823139601137724/discord-logo-1100x825.jpg"
             crafts = []
             for x in ctx.message.attachments:
                 file = await x.read()
