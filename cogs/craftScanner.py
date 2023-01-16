@@ -20,7 +20,7 @@ def to_str(x):
 
 def is_basic_avatar(avatar_url):
     if avatar_url == None:
-        return "https://cdn.discordapp.com/attachments/681058514797461647/1063823139601137724/discord-logo-1100x825.jpg"
+        return "https://cdn.discordapp.com/attachments/609052230691061782/1064415266848649346/IMG_2707.png"
     else:
         return avatar_url
 
