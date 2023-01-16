@@ -28,7 +28,7 @@ def is_basic_avatar(avatar_url):
 def length_limit(dict):
     over_list = []
     for text in dict.values():
-        if len(str(text)) > 100:
+        if len(str(text)) > 500:
             over_list.append(text)
         else:
             pass
