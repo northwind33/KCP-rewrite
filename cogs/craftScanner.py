@@ -38,7 +38,7 @@ def length_limit(dict):
         for over_text in over_list:
             for key in dict.keys():
                 if dict.get(key) == over_text:
-                    dict[key] = over_text[:100] + "..."
+                    dict[key] = over_text[:500] + "..."
                     break
                 else:
                     pass
