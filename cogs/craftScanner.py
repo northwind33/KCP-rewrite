@@ -25,6 +25,26 @@ def is_basic_avatar(avatar_url):
         return avatar_url
 
 
+def length_limit(dict):
+    over_list = []
+    for text in dict.values():
+        if len(text) > 100:
+            over_list.append(text)
+        else:
+            pass
+    if len(over_list) == 0:
+        return dict
+    else:
+        for over_text in over_list:
+            for key in dict.keys():
+                if dict.get(key) == over_text:
+                    dict[key] = over_text[:100] + "..."
+                    break
+                else:
+                    pass
+        return dict
+
+
 class CraftScanner(commands.Cog, name="craftScanner"):
     def __init__(self, bot):
         self.bot = bot
@@ -203,6 +223,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         if value == False:
                             passed = False
                             break
+                    craft[2] = length_limit(craft[2])
                     if passed:
                         embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0x00ff95)
                         embed.set_author(name=ctx.author.name, icon_url=author_avatar)
@@ -436,6 +457,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         if value == False:
                             passed = False
                             break
+                    craft[2] = length_limit(craft[2])
                     if passed:
                         embed = discord.Embed(title=f"'{craft[1]}' Results", color=0x00ff95)
                         embed.set_author(name=ctx.author.name, icon_url=author_avatar)
