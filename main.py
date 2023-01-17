@@ -52,7 +52,8 @@ async def restart(ctx):
         for paths in paths_list:
             for (path, dirs, files) in os.walk(paths[0]):
                 for file_name in files:
-                    os.remove(paths[1] + "/" + file_name)
+                    if os.path.exists(paths[1] + "/" + file_name):
+                        os.remove(paths[1] + "/" + file_name)
                     shutil.move(paths[0] + "/" + file_name, paths[1] + "/" + file_name)
         shutil.rmtree("KCP-rewrite", onerror=on_rm_error)
         os.execl(sys.executable, sys.executable, *sys.argv)
