@@ -26,23 +26,12 @@ def is_basic_avatar(avatar_url):
 
 
 def length_limit(dict):
-    over_list = []
-    for text in dict.values():
-        if len(str(text)) > 500:
-            over_list.append(text)
+    for key, value in dict.items():
+        if len(str(value)) > 500:
+            dict[key] = value[:500] + "..."
         else:
             pass
-    if len(over_list) == 0:
-        return dict
-    else:
-        for over_text in over_list:
-            for key in dict.keys():
-                if dict.get(key) == over_text:
-                    dict[key] = over_text[:500] + "..."
-                    break
-                else:
-                    pass
-        return dict
+    return dict
 
 
 class CraftScanner(commands.Cog, name="craftScanner"):
