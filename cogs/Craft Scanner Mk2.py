@@ -259,6 +259,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                             embed.add_field(name=text[0], value="❌ " + craft[2].get(text[2]) + text[4], inline=False)
                     if craft[0]['Unknown_unit_pass'] is False:
                         embed.add_field(name='❗ 알 수 없는 자원이 발견되었어요.', value=str(craft[2]['Unknown_unit']))
+                    embed.set_footer(text="버그 제보 : cart324#7199")
                     await ctx.send(embed=embed)
                 if ctx.guild:
                     await ctx.message.delete()
@@ -296,20 +297,21 @@ class CraftScanner(commands.Cog, name="craftScanner"):
 
             if len(crafts) == 0:
                 embed = discord.Embed(title="ERROR",
-                                      description="앗! 확인할 파일이 없어요.\n명령어 입력 시 `.craft` 파일을 같이 첨부해 주세요.",
+                                      description="OOPS, The file is missing.\n"
+                                                  "Please attach your `.craft` file when using this command.",
                                       color=0xeb4258)
                 embed.set_author(name=ctx.author.name, icon_url=author_avatar)
                 embed.set_thumbnail(url=author_avatar)
-                embed.set_footer(text="버그 제보 : cart324#7199")
+                embed.set_footer(text="Bug report : cart324#7199")
                 await ctx.send(embed=embed)
             else:
                 for craft in crafts:
                     craft[2] = length_limit(craft[2])
                     passed = is_passed(craft[0])
                     if passed:
-                        embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0x00ff95)
+                        embed = discord.Embed(title=f"'{craft[1]}' Results", color=0x00ff95)
                     else:
-                        embed = discord.Embed(title=f"'{craft[1]}' 검수 결과", color=0xeb4258)
+                        embed = discord.Embed(title=f"'{craft[1]}' Results", color=0xeb4258)
                     embed.set_author(name=ctx.author.name, icon_url=author_avatar)
                     embed.set_thumbnail(url=author_avatar)
                     for text in self.texts_en:
@@ -322,6 +324,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                                             inline=False)
                     if craft[0]['Unknown_unit_pass'] is False:
                         embed.add_field(name='❗ Unknown Unit Detected', value=str(craft[2]['Unknown_unit']))
+                    embed.set_footer(text="Bug report : cart324#7199")
                     await ctx.send(embed=embed)
                 if ctx.guild:
                     await ctx.message.delete()
