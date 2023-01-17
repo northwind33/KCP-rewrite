@@ -11,15 +11,15 @@ def up(something):
         return round(something, 3)
 
 
-def to_str(x):
-    x = str(x)
-    x_div = x.split(".")
-    x_com = x_div[0] + "." + x_div[1][:3]
-    return x_com
+def to_str(dec):
+    dec = str(dec)
+    dec_divide = dec.split(".")
+    dec_merge = dec_divide[0] + "." + dec_divide[1][:3]
+    return dec_merge
 
 
 def is_basic_avatar(avatar_url):
-    if avatar_url == None:
+    if avatar_url is None:
         return "https://cdn.discordapp.com/attachments/681058514797461647/1064418671100956682/image.png"
     else:
         return avatar_url
