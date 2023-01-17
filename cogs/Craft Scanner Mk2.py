@@ -272,7 +272,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             await ctx.send(embed=embed)
             error_log = traceback.format_exc(limit=None, chain=True)
             cart = self.bot.get_user(344384179552780289)
-            await cart.send(("-" * 40) + "\n" + "사용자 = " + ctx.author.name + "\n" + str(error_log))
+            await cart.send("```" + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log) + "```")
 
     # [제목, craft[0]키, craft[2]키, 통과시 추가 문구, 비통과시 추가 문구]
     texts_en = [['Game Version', 'Version_pass', 'Version', '', ''],
@@ -340,7 +340,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             await ctx.send(embed=embed)
             error_log = traceback.format_exc(limit=None, chain=True)
             cart = self.bot.get_user(344384179552780289)
-            await cart.send(("-" * 40) + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log))
+            await cart.send("```" + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log) + "```")
 
 
 def setup(bot):
