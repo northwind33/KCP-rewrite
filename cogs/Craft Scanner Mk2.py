@@ -228,19 +228,33 @@ class CraftScanner(commands.Cog, name="craftScanner"):
         author_avatar = is_basic_avatar(ctx.author.avatar)
         try:
             crafts = []
+            ext_error = False
             for file in ctx.message.attachments:
-                file = await file.read()
-                file = file.decode("utf-8")
-                crafts.append(self.check(file))  # 파일 검수
+                if str(file).split(".")[-1] == "craft":
+                    file = await file.read()
+                    file = file.decode("utf-8")
+                    crafts.append(self.check(file))  # 파일 검수
+                else:
+                    ext_error = True
+                    embed = discord.Embed(title="ERROR",
+                                          description="앗! 알 수 없는 파일이에요.\n`.craft` 파일만을 첨부해 주세요.",
+                                          color=0xeb4258)
+                    embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                    embed.set_thumbnail(url=author_avatar)
+                    embed.set_footer(text="버그 제보 : cart324#7199")
+                    await ctx.send(embed=embed)
 
             if len(crafts) == 0:
-                embed = discord.Embed(title="ERROR",
-                                      description="앗! 확인할 파일이 없어요.\n명령어 입력 시 `.craft` 파일을 같이 첨부해 주세요.",
-                                      color=0xeb4258)
-                embed.set_author(name=ctx.author.name, icon_url=author_avatar)
-                embed.set_thumbnail(url=author_avatar)
-                embed.set_footer(text="버그 제보 : cart324#7199")
-                await ctx.send(embed=embed)
+                if ext_error:
+                    pass
+                else:
+                    embed = discord.Embed(title="ERROR",
+                                          description="앗! 확인할 파일이 없어요.\n명령어 입력 시 `.craft` 파일을 같이 첨부해 주세요.",
+                                          color=0xeb4258)
+                    embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                    embed.set_thumbnail(url=author_avatar)
+                    embed.set_footer(text="버그 제보 : cart324#7199")
+                    await ctx.send(embed=embed)
             else:
                 for craft in crafts:
                     craft[2] = length_limit(craft[2])
@@ -290,20 +304,34 @@ class CraftScanner(commands.Cog, name="craftScanner"):
         author_avatar = is_basic_avatar(ctx.author.avatar)
         try:
             crafts = []
+            ext_error = False
             for file in ctx.message.attachments:
-                file = await file.read()
-                file = file.decode("utf-8")
-                crafts.append(self.check(file))  # 파일 검수
+                if str(file).split(".")[-1] == "craft":
+                    file = await file.read()
+                    file = file.decode("utf-8")
+                    crafts.append(self.check(file))  # 파일 검수
+                else:
+                    ext_error = True
+                    embed = discord.Embed(title="ERROR",
+                                          description="OOPS, I can't read the file.\nPlease attach only `.craft` file",
+                                          color=0xeb4258)
+                    embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                    embed.set_thumbnail(url=author_avatar)
+                    embed.set_footer(text="Bug report : cart324#7199")
+                    await ctx.send(embed=embed)
 
             if len(crafts) == 0:
-                embed = discord.Embed(title="ERROR",
-                                      description="OOPS, The file is missing.\n"
-                                                  "Please attach your `.craft` file when using this command.",
-                                      color=0xeb4258)
-                embed.set_author(name=ctx.author.name, icon_url=author_avatar)
-                embed.set_thumbnail(url=author_avatar)
-                embed.set_footer(text="Bug report : cart324#7199")
-                await ctx.send(embed=embed)
+                if ext_error:
+                    pass
+                else:
+                    embed = discord.Embed(title="ERROR",
+                                          description="OOPS, The file is missing.\n"
+                                                      "Please attach your `.craft` file when using this command.",
+                                          color=0xeb4258)
+                    embed.set_author(name=ctx.author.name, icon_url=author_avatar)
+                    embed.set_thumbnail(url=author_avatar)
+                    embed.set_footer(text="Bug report : cart324#7199")
+                    await ctx.send(embed=embed)
             else:
                 for craft in crafts:
                     craft[2] = length_limit(craft[2])
