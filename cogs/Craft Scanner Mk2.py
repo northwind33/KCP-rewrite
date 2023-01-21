@@ -272,7 +272,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         else:
                             embed.add_field(name=text[0], value="❌ " + craft[2].get(text[2]) + text[4], inline=False)
                     if craft[0]['Unknown_unit_pass'] is False:
-                        embed.add_field(name='❗ 알 수 없는 자원이 발견되었어요.', value=str(craft[2]['Unknown_unit']))
+                        embed.add_field(name='❗ 알 수 없는 자원이 발견되었어요.', value=str(craft[2]['Unknown_unit']), inline=False)
                     embed.set_footer(text="버그 제보 : cart324#7199")
                     await ctx.send(embed=embed)
                 if ctx.guild:
@@ -345,13 +345,11 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     for text in self.texts_en:
                         text_passed = craft[0][text[1]]
                         if text_passed:
-                            embed.add_field(name=text[0], value="🟢 " + craft[2].get(text[2]) + text[3],
-                                            inline=False)
+                            embed.add_field(name=text[0], value="🟢 " + craft[2].get(text[2]) + text[3], inline=False)
                         else:
-                            embed.add_field(name=text[0], value="❌ " + craft[2].get(text[2]) + text[4],
-                                            inline=False)
+                            embed.add_field(name=text[0], value="❌ " + craft[2].get(text[2]) + text[4], inline=False)
                     if craft[0]['Unknown_unit_pass'] is False:
-                        embed.add_field(name='❗ Unknown Unit Detected', value=str(craft[2]['Unknown_unit']))
+                        embed.add_field(name='❗ Unknown Unit Detected', value=str(craft[2]['Unknown_unit']), inline=False)
                     embed.set_footer(text="Bug report : cart324#7199")
                     await ctx.send(embed=embed)
                 if ctx.guild:
