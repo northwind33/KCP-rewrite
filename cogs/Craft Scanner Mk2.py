@@ -167,7 +167,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
 
                     elif "amount" in line:
                         amount = line[11:]
-                        if unit_name in self.units_dics_dic:
+                        if unit_name in self.units_dic:
                             mass += Decimal(self.units_dic.get(unit_name)) * Decimal(amount)
                         else:
                             unknown_unit_list.append(unit_name)
