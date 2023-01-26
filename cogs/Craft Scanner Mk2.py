@@ -101,17 +101,17 @@ class CraftScanner(commands.Cog, name="craftScanner"):
         resource = False
 
         for line in file.splitlines():
-            if "ship" in line:
+            if "ship = " in line:
                 name = line[7:]
                 craft[1] = name
 
-            elif "version" in line:
+            elif "version = " in line:
                 version = line[10:]
                 craft[2]['Version'] = version
                 if version == self.season_version:
                     craft[0]['Version_pass'] = True
 
-            elif "size" in line:
+            elif "size = " in line:
                 sizes = line[7:]
                 sizes = [round(y, 1) for y in map(float, sizes.split(","))]
                 size = " × ".join(map(str, sizes))  # sizes는 [너비, 높이, 길이], size는 ×로 연결한 str
@@ -136,36 +136,36 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                     prohibition_list.append(part_name)
 
             if prohibition is False:
-                if "modMass" in line:
+                if "modMass = " in line:
                     modmass = line[11:]
                     mass += Decimal(modmass)
 
-                elif "ArmorTypeNum" in line:
+                elif "ArmorTypeNum = " in line:
                     armor_type = line[17:]
                     if not armor_type == part_info.get("part_ArmorType"):
                         armor_type_list.append(part_name)
 
-                elif "HullTypeNum" in line:
+                elif "HullTypeNum = " in line:
                     hull_type = line[16:]
                     if not hull_type == part_info.get("part_HullType"):
                         hull_type_list.append(part_name)
 
-                elif "currentScale" in line:
+                elif "currentScale = " in line:
                     current_scale = line[15:]
 
-                elif "defaultScale" in line:
+                elif "defaultScale = " in line:
                     default_scale = line[15:]
                     if "u" not in part_info.get("part_TweakScale") and current_scale > default_scale:
                         tweak_list.append(part_name)
 
-                elif "RESOURCE" in line:
+                elif "RESOURCE = " in line:
                     resource = True
 
                 if resource is True:
-                    if "name" in line:
+                    if "name = " in line:
                         unit_name = line[9:]
 
-                    elif "amount" in line:
+                    elif "amount = " in line:
                         amount = line[11:]
                         if unit_name in self.units_dic:
                             mass += Decimal(self.units_dic.get(unit_name)) * Decimal(amount)
