@@ -36,14 +36,7 @@ def on_rm_error(func, path, exc_info):
     os.unlink(path)
 
 
-async def handle_exit():
-    channal = bot.get_channal(707591545863536680)
-    await channal.send("봇이 종료되었습니다.")
-
-
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
-
-atexit.register(handle_exit)
 
 paths_list = [["KCP-rewrite/data", "data"], ["KCP-rewrite/cogs", "cogs"]]  # [옮길 파일 위치, 옮겨질 위치]
 
