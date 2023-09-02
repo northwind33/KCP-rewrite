@@ -36,8 +36,8 @@ def on_rm_error(func, path, exc_info):
     os.unlink(path)
 
 
-def handle_exit():
-    channal = 707591545863536680
+async def handle_exit():
+    channal = bot.get_channal(707591545863536680)
     await channal.send("봇이 종료되었습니다.")
 
 
