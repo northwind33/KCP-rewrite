@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from decimal import Decimal
 import traceback
+import time
 
 
 def up(something):
@@ -43,6 +44,21 @@ def length_limit(dic):
     return dic
 
 
+def print_log(is_succeed, is_guild, author_name):
+    now = str(time.strftime('%Y.%m.%d %H:%M:%S - '))
+
+    if is_succeed:
+        text = "Processing success"
+    else:
+        text = "An error occurred"
+
+    add = ""
+    if not is_guild:
+        add = " (in DM)"
+
+    print(now + text + ", user = " + author_name + add)
+
+
 class CraftScanner(commands.Cog, name="craftScanner"):
     def __init__(self, bot):
         self.bot = bot
@@ -72,6 +88,8 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             self.season_mass = season[4]
             self.season_point = season[5]
             self.season_count = season[6]
+        now = str(time.strftime('%Y.%m.%d %H:%M:%S - '))
+        print(now + "Data load complete")
 
     def check(self, file):
         template = {
@@ -230,7 +248,7 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             crafts = []
             ext_error = False
             for file in ctx.message.attachments:
-                if str(file).split(".")[-1] == "craft":
+                if str(file.filename).split(".")[-1] == "craft":
                     file = await file.read()
                     file = file.decode("utf-8")
                     crafts.append(self.check(file))  # 파일 검수
@@ -275,9 +293,11 @@ class CraftScanner(commands.Cog, name="craftScanner"):
                         embed.add_field(name='❗ 알 수 없는 자원이 발견되었어요.', value=str(craft[2]['Unknown_unit']), inline=False)
                     embed.set_footer(text="버그 제보 : cart324#7199")
                     await ctx.send(embed=embed)
+                    print_log(True, ctx.guild, ctx.author.name)
                 if ctx.guild:
                     await ctx.message.delete()
         except Exception:
+            print_log(False, ctx.guild, ctx.author.name)
             embed = discord.Embed(title="ERROR", color=0xeb4258)
             embed.set_author(name=ctx.author.name, icon_url=author_avatar)
             embed.set_thumbnail(url=author_avatar)
@@ -369,5 +389,5 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             await cart.send("```" + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log) + "```")
 
 
-def setup(bot):
-    bot.add_cog(CraftScanner(bot))
+async def setup(bot):
+    await bot.add_cog(CraftScanner(bot))
