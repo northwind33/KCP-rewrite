@@ -7,7 +7,6 @@ import shutil
 import stat
 import traceback
 from discord.ext import commands
-import atexit
 
 with open('token.txt', 'r') as f:
     token = f.read()
@@ -65,19 +64,23 @@ async def restart(ctx):
 
 
 @bot.command()
-async def load(ctx, extension):
-    if not is_whitelisted(ctx.author.id):
-        return
-    load_settings()
-    bot.load_extension(f'cogs.{extension}')
-    await ctx.send(f'Loaded {extension}')
+async def load(ctx):
+    # async def load(ctx, extension):
+    # if not is_whitelisted(ctx.author.id):
+    #     return
+    # load_settings()
+    # await bot.load_extension(f'cogs.{extension}')
+    # await ctx.send(f'Loaded {extension}')
+    for x in os.listdir("./cogs"):
+        if x.endswith(".py") and not x.startswith("_"):
+            await bot.load_extension(f"cogs.{x.replace('.py', '')}")
 
 
 @bot.command()
 async def unload(ctx, extension):
     if not is_whitelisted(ctx.author.id):
         return
-    bot.unload_extension(f'cogs.{extension}')
+    await bot.unload_extension(f'cogs.{extension}')
     await ctx.send(f'Unloaded {extension}')
 
 
@@ -86,12 +89,13 @@ async def reload(ctx, extension):
     if not is_whitelisted(ctx.author.id):
         return
     load_settings()
-    bot.unload_extension(f'cogs.{extension}')
-    bot.load_extension(f'cogs.{extension}')
+    await bot.unload_extension(f'cogs.{extension}')
+    await bot.load_extension(f'cogs.{extension}')
     await ctx.send(f'Reloaded {extension}')
 
 
-[bot.load_extension(f"cogs.{x.replace('.py', '')}") for x in os.listdir("./cogs") if
- x.endswith('.py') and not x.startswith("_")]
+# [bot.load_extension(f"cogs.{x.replace('.py', '')}") for x in os.listdir("./cogs") if
+# x.endswith('.py') and not x.startswith("_")]
+asyncio.run(load(None))
 
 bot.run(token)
