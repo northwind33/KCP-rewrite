@@ -6,5 +6,5 @@ class FileControl(commands.Cog, name="filecontrol"):
         self.bot = bot
 
 
-def setup(bot):
-    bot.add_cog(FileControl(bot))
+async def setup(bot):
+    await bot.add_cog(FileControl(bot))
