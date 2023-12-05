@@ -7,6 +7,7 @@ import shutil
 import stat
 import traceback
 from discord.ext import commands
+import time
 
 with open('token.txt', 'r') as f:
     token = f.read()
@@ -46,6 +47,8 @@ async def restart(ctx):
         if not is_whitelisted(ctx.author.id):
             return
         await ctx.send('봇이 재시작됩니다.')
+        now = str(time.strftime('%Y.%m.%d %H:%M:%S - '))
+        print(now + "Received restart command, user = " + ctx.author.name)
         if os.path.exists("KCP-rewrite"):
             shutil.rmtree("KCP-rewrite", onerror=on_rm_error)
         os.system("git clone https://github.com/rainy10/KCP-rewrite")
