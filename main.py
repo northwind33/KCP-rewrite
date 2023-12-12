@@ -1,5 +1,4 @@
 import discord
-import asyncio
 import json
 import os
 import sys
@@ -7,7 +6,6 @@ import shutil
 import stat
 import traceback
 from discord.ext import commands
-import time
 
 with open('token.txt', 'r') as f:
     token = f.read()
@@ -47,8 +45,6 @@ async def restart(ctx):
         if not is_whitelisted(ctx.author.id):
             return
         await ctx.send('봇이 재시작됩니다.')
-        now = str(time.strftime('%Y.%m.%d %H:%M:%S - '))
-        print(now + "Received restart command, user = " + ctx.author.name)
         if os.path.exists("KCP-rewrite"):
             shutil.rmtree("KCP-rewrite", onerror=on_rm_error)
         os.system("git clone https://github.com/rainy10/KCP-rewrite")
@@ -67,23 +63,19 @@ async def restart(ctx):
 
 
 @bot.command()
-async def load(ctx):
-    # async def load(ctx, extension):
-    # if not is_whitelisted(ctx.author.id):
-    #     return
-    # load_settings()
-    # await bot.load_extension(f'cogs.{extension}')
-    # await ctx.send(f'Loaded {extension}')
-    for x in os.listdir("./cogs"):
-        if x.endswith(".py") and not x.startswith("_"):
-            await bot.load_extension(f"cogs.{x.replace('.py', '')}")
+async def load(ctx, extension):
+    if not is_whitelisted(ctx.author.id):
+        return
+    load_settings()
+    bot.load_extension(f'cogs.{extension}')
+    await ctx.send(f'Loaded {extension}')
 
 
 @bot.command()
 async def unload(ctx, extension):
     if not is_whitelisted(ctx.author.id):
         return
-    await bot.unload_extension(f'cogs.{extension}')
+    bot.unload_extension(f'cogs.{extension}')
     await ctx.send(f'Unloaded {extension}')
 
 
@@ -92,13 +84,12 @@ async def reload(ctx, extension):
     if not is_whitelisted(ctx.author.id):
         return
     load_settings()
-    await bot.unload_extension(f'cogs.{extension}')
-    await bot.load_extension(f'cogs.{extension}')
+    bot.unload_extension(f'cogs.{extension}')
+    bot.load_extension(f'cogs.{extension}')
     await ctx.send(f'Reloaded {extension}')
 
 
-# [bot.load_extension(f"cogs.{x.replace('.py', '')}") for x in os.listdir("./cogs") if
-# x.endswith('.py') and not x.startswith("_")]
-asyncio.run(load(None))
+[bot.load_extension(f"cogs.{x.replace('.py', '')}") for x in os.listdir("./cogs") if
+ x.endswith('.py') and not x.startswith("_")]
 
 bot.run(token)
