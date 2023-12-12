@@ -389,5 +389,5 @@ class CraftScanner(commands.Cog, name="craftScanner"):
             await cart.send("```" + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log) + "```")
 
 
-async def setup(bot):
-    await bot.add_cog(CraftScanner(bot))
+def setup(bot):
+    bot.add_cog(CraftScanner(bot))
