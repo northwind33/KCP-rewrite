@@ -36,7 +36,7 @@ def load_all_cogs():
 def unload_all_cogs():
     global current_cogs_list
     for i in current_cogs_list:
-        client.unload_extension(f"Cogs.{i.split('.')[0]}")
+        client.unload_extension(f"cogs.{i.split('.')[0]}")
     current_cogs_list = []
 
 
@@ -59,7 +59,7 @@ async def cog_list(ctx):
 async def unload_cog(ctx, cog_name: discord.Option(str)):
     global current_cogs_list
     try:
-        client.unload_extension(f"Cogs.{cog_name}")
+        client.unload_extension(f"cogs.{cog_name}")
         current_cogs_list.remove(f"{cog_name}.py")
         print_log(f"{cog_name} has been unloaded")
         await ctx.respond(f"{cog_name}을 언로드 하였습니다.")
@@ -81,7 +81,7 @@ async def unload_cog(ctx, cog_name: discord.Option(str)):
 async def load_cog(ctx, cog_name: discord.Option(str)):
     global current_cogs_list
     try:
-        client.load_extension(f"Cogs.{cog_name}")
+        client.load_extension(f"cogs.{cog_name}")
         current_cogs_list.append(f"{cog_name}.py")
         print_log(f"{cog_name} has been loaded")
         await ctx.respond(f"{cog_name}을 로드 하였습니다.")
