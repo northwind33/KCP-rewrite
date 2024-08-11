@@ -57,6 +57,7 @@ async def cog_list(ctx):
 
 @client.slash_command()
 async def unload_cog(ctx, cog_name: discord.Option(str)):
+    global current_cogs_list
     try:
         client.unload_extension(f"Cogs.{cog_name}")
         current_cogs_list.remove(f"{cog_name}.py")
@@ -78,6 +79,7 @@ async def unload_cog(ctx, cog_name: discord.Option(str)):
 
 @client.slash_command()
 async def load_cog(ctx, cog_name: discord.Option(str)):
+    global current_cogs_list
     try:
         client.load_extension(f"Cogs.{cog_name}")
         current_cogs_list.append(f"{cog_name}.py")
