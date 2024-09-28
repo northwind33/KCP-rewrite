@@ -12,7 +12,7 @@ client = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 current_cogs_list = []
 
-project_name = "KCP-rewrite-main"  # <<<<< 새 봇 제작시 바꿀 것!!
+project_name = "KCP-rewrite-main"
 
 
 def print_log(text):
@@ -45,7 +45,7 @@ load_all_cogs()
 print_log(f"bot has been started, loaded cogs : {current_cogs_list}")
 
 
-@client.slash_command()
+@client.slash_command(default_member_permissions=discord.Permissions(administrator=True))
 async def cog_list(ctx):
     avail_cogs_list = []
     for i in os.listdir("cogs"):
@@ -55,7 +55,7 @@ async def cog_list(ctx):
     await ctx.respond("로드 가능한 cog :" + str(avail_cogs_list) + "\n현제 로드된 cog :" + str(current_cogs_list))
 
 
-@client.slash_command()
+@client.slash_command(default_member_permissions=discord.Permissions(administrator=True))
 async def unload_cog(ctx, cog_name: discord.Option(str)):
     global current_cogs_list
     try:
@@ -77,7 +77,7 @@ async def unload_cog(ctx, cog_name: discord.Option(str)):
         await cart.send("```" + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log) + "```")
 
 
-@client.slash_command()
+@client.slash_command(default_member_permissions=discord.Permissions(administrator=True))
 async def load_cog(ctx, cog_name: discord.Option(str)):
     global current_cogs_list
     try:
@@ -99,7 +99,7 @@ async def load_cog(ctx, cog_name: discord.Option(str)):
         await cart.send("```" + "\n" "사용자 = " + ctx.author.name + "\n" + str(error_log) + "```")
 
 
-@client.slash_command()
+@client.slash_command(default_member_permissions=discord.Permissions(administrator=True))
 async def update(ctx):
     try:
         if os.path.exists(project_name):    # 다운로드 폴더 확인
